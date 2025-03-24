@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="rotationSystem.js"></script>
+	<script src="io.js"></script>
+	<script src="utils.js"></script>
+	<script src="tetris-fumen.js"></script>
+	<script defer src="cancellingsickness.js"></script>
+	<script defer src="tetrio.js"></script>
+	<script defer src="zztetris.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+	<link rel="icon" href="./assets/pieceSprite/z.png" />
+	<link rel="stylesheet" type="text/css" href="styles/zztetris.css" />
+	<link rel="stylesheet" type="text/css" href="styles/paint_bucket.css" />
+	<link rel="stylesheet" type="text/css" href="styles/import_export.css" />
+	<link rel="stylesheet" type="text/css" href="styles/board_settings.css" />
+	<head>
+		<meta charset="UTF-8" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://swng.github.io/zztetris/" />
+		<meta property="og:title" content="ZZTetris" />
+		<meta
+			property="og:description"
+			content='a tetris client that starts with ZZ so you can type "ZZ" into your address bar and have it autocomplete'
+		/>
+		<meta
+			property="og:image"
+			content="https://cdn.discordapp.com/attachments/209687919361916928/898230618012418088/unknown.png"
+		/>
+		<title>ZZTetris</title>
+	</head>
+	<body style="background-color: #222; color: #fff">
+		<div style="top: 50%; left: 50%; position: fixed; transform: translate(-50%, -50%); display: flex">
+			<div class="import-export">
+				<div class="exports">
+					<h3>Export To</h3>
+					<button class="button" onclick="this.blur(); exportFumen()">Fumen</button>
+					<button class="button" onclick="this.blur(); exportFullFumen()">Full Fumen</button>
+					<button class="button" onclick="this.blur(); exportTetrio()">TETRIO</button>
+				</div>
+
+				<div class="imports">
+					<h3>Import From</h3>
+					<button class="button" onclick="this.blur(); importFumen()">Fumen</button>
+					<button class="button" onclick="this.blur(); importFullFumen()">Full Fumen</button>
+					<button class="button" onclick="this.blur(); importTetrio()">TETRIO</button>
+					<button class="button" onclick="this.blur(); importImageButton()">Image</button>
+				</div>
+			</div>
+
+			<div class="queue">
+				HOLD
+				<hr />
+				<canvas id="h" width="90" height="60"></canvas>
+				<div id="notif" style="width: 90px; text-align: center"></div>
+			</div>
+
+			<div>
+				<canvas id="b" width="200" height="400" style="padding: 18px"></canvas>
+			</div>
+
+			<div class="queue">
+				NEXT
+				<hr />
+				<canvas id="n" width="90" height="360"></canvas>
+			</div>
+
+			<div class="board-settings">
+				<h3>Options</h3>
+				<button class="button button--shuffle" onclick="this.blur(); shuffleQueue();">Queue</button>
+				<button class="button button--shuffle" onclick="this.blur(); shuffleQueuePlusHold();">
+					Queue + Hold
+				</button>
+
+				<button class="button" onclick="this.blur(); mirror()">Mirror</button>
+				<button class="button" onclick="this.blur(); fullMirror()">Full Mirror</button>
+
+				<form class="paint-bucket" name="paintbucket">
+					<label for="X">
+						<input type="radio" name="paintbucket" class="paintbucket" id="X" value="X" checked />
+						<span></span>
+					</label>
+					<label for="I">
+						<input type="radio" name="paintbucket" class="paintbucket" id="I" value="I" />
+						<span></span>
+					</label>
+					<label for="J">
+						<input type="radio" name="paintbucket" class="paintbucket" id="J" value="J" />
+						<span></span>
+					</label>
+					<label for="S">
+						<input type="radio" name="paintbucket" class="paintbucket" id="S" value="S" />
+						<span></span>
+					</label>
+					<label for="O">
+						<input type="radio" name="paintbucket" class="paintbucket" id="O" value="O" />
+						<span></span>
+					</label>
+					<label for="Z">
+						<input type="radio" name="paintbucket" class="paintbucket" id="Z" value="Z" />
+						<span></span>
+					</label>
+					<label for="L">
+						<input type="radio" name="paintbucket" class="paintbucket" id="L" value="L" />
+						<span></span>
+					</label>
+					<label for="T">
+						<input type="radio" name="paintbucket" class="paintbucket" id="T" value="T" />
+						<span></span>
+					</label>
+				</form>
+				<div><input type="checkbox" checked id="autocolor" /> <label for="autocolor">autocolor</label></div>
+				<div><input type="checkbox" checked id="grav" /> <label for="grav">gravity</label></div>
+				<p></p>
+                <form>
+					<label for="garbageCol">Garbage:</label>
+					<select name="garbageCol" id="garbageCol">
+						<option value=0>0th col</option>
+						<option value=1>1th col</option>
+						<option value=2>2th col</option>
+						<option value=3>3th col</option>
+                        <option value=4>4th col</option>
+                        <option value=5>5th col</option>
+                        <option value=6>6th col</option>
+                        <option value=7>7th col</option>
+                        <option value=8>8th col</option>
+                        <option value=9>9th col</option>
+					</select>
+				</form>
+				<button class="button" onclick="this.blur(); garbage(document.getElementById('garbageCol').value);">Submit</button>
+				<form>
+					<label for="kickset">Kickset:</label>
+					<select name="kickset" id="kickset">
+						<option value="SRS+">SRS+</option>
+						<option value="SRS">SRS</option>
+						<option value="SRS-X">SRS-X</option>
+                        <option value="Tetra-Online">Tetra-Online</option>
+						<option value="ASC">ASC</option>
+                        <option value="none">none</option>
+					</select>
+				</form>
+				<button class="button" onclick="this.blur(); updateKickTable()">Submit</button>
+				<tr>
+					<td>Cancel Streak</td>
+					<td class="numinput"><input type="number" id="CancelStreak" max="750" value="20" /></td>
+				</tr>
+			</div>
+		</div>
+
+		<a class="button" target="_blank" href="https://github.com/swng/zztetris#readme">About</a>
+		<button class="button" target="popup" onclick="ctrlsPopup()">Game Settings</button>
+        <a class="button">button that does nothing</a>
+        <a class="button" href="index.html">practice</a>
+        <a class="button" href="cheese.html">cheese</a>
+        <a class="button" href="4w.html">4w</a>
+        <a class="button" href="grav.html">grav</a>
+        <a class="button" href="pc.html">pc</a>
+
+        <div id = "tcc" style class = "tc">
+            <div>
+                <span id="tc-dr"><svg><use xlink:href="./assets/icons/dark.svg#s-r180"></use></svg></span>
+                <span id="tc-h"><svg><use xlink:href="./assets/icons/dark.svg#s-hold"></use></svg></span>
+                <span id="tc-hd"><svg><use xlink:href="./assets/icons/dark.svg#s-harddrop"></use></svg></span>
+                </div>
+                <div>
+                <span id="tc-l"><svg><use xlink:href="./assets/icons/dark.svg#s-back"></use></svg></span>
+                <span id="tc-r"><svg><use xlink:href="./assets/icons/dark.svg#s-forward"></use></svg></span>
+                <span id="tc-d"><svg><use xlink:href="./assets/icons/dark.svg#s-down"></use></svg></span>
+                <span id="tc-cc"><svg><use xlink:href="./assets/icons/dark.svg#s-ccw"></use></svg></span>
+                <span id="tc-c"><svg><use xlink:href="./assets/icons/dark.svg#s-cw"></use></svg></span>
+                <span id="tc-re"><svg><use xlink:href="./assets/icons/dark.svg#s-reload"></use></svg></span>
+                </div>
+            <canvas id="mobile_controls"></canvas>
+        </div>
+	</body>
+</html>
