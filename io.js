@@ -288,6 +288,6 @@ async function importFullFumen() {
 async function sfinder() {
 	fumen = encode(board);
 	console.log(fumen);
-	let export_queue = queue.join("").replaceAll("|","");
+	let export_queue = holdP + piece + queue.join("").replaceAll("|","");
 	window.open(`https://sfinder.sixwi.de/?fumen=${fumen}&command=path&game=jstris&clearLines=4&queue=${export_queue}`, '_blank');
 }
