@@ -392,6 +392,7 @@ document.getElementById('n').addEventListener('click', (event) => {
 		queue = temp;
 		newPiece();
 	}
+	updateHistory();
 });
 
 // hold
