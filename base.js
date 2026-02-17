@@ -792,10 +792,7 @@ function callback(gravity=700, special_restart=false, cheese=false) {
 	}, gravity);
 
 	function playSnd(sfx, overlap) {
-		let s = sfxCache[sfx]
-		if (!s) {
-			s = sfxCache[sfx] = new Audio(`assets/sfx/${sfx}.wav`);
-		}
+		const s = sfxCache[sfx] ??= new Audio(`assets/sfx/${sfx}.wav`);
 		if (overlap) {
 			s.currentTime = 0
 		}
