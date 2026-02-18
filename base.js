@@ -798,11 +798,12 @@ function callback(gravity=700, special_restart=false, cheese=false) {
 	}, gravity);
 
 	function playSnd(sfx, overlap) {
-		if (sfxCache[sfx] && !overlap) return sfxCache[sfx].play();
-		var s = new Audio(`assets/sfx/${sfx}.wav`);
-		sfxCache[sfx] = s;
-        s.volume = audiolevel/100;
-		s.play();
+		const s = sfxCache[sfx] ??= new Audio(`assets/sfx/${sfx}.wav`);
+		if (overlap) {
+			s.currentTime = 0
+		}
+		s.volume = audiolevel/100;
+		s.play()
 	}
 
 
