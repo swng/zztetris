@@ -598,6 +598,12 @@ function callback(gravity=700, special_restart=false, cheese=false) {
 	keysDown = 0;
 	lastKeys = 0;
 
+	document.getElementById('tc-un').addEventListener('touchstart', function (e) {
+		input = 'UNDO';
+		keysDown |= flags[input];
+		undo();
+	});
+
 	document.getElementById('tc-re').addEventListener('touchstart', function (e) {
 		input = 'RE';
 		keysDown |= flags[input];
