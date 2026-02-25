@@ -17,7 +17,7 @@ function ctrlsPopup() { // opens a popup window with keybinds
 }
 
 function aboutPopup() {
-	window.alert(`START BY ADJUSTING KEYBINDS AND SETTINGS
+	/*window.alert(`START BY ADJUSTING KEYBINDS AND SETTINGS
 zztetris
 a tetris client with a name that starts with zz so you can type zz and have it autocomplete
 forked from aznguy's schoolteto, a number of features added
@@ -27,7 +27,31 @@ Import/Export works through your clipboard. Doesn't work on Firefox.
 Undo/redo is a thing. It keeps track of your board state history.
 *Full* fumen import/export sets your board state history as the fumen pages and vice versa.
 Drawing on the board is a thing.`);
-}
+}*/
+
+	Promise.all([
+		import('https://unpkg.com/@material/mwc-snackbar@0.27.0/mwc-snackbar.js?module'),
+		import('https://unpkg.com/@material/mwc-button@0.27.0/mwc-button.js?module'),
+		import('https://unpkg.com/lit-html@3.3.2/lit-html.js?module'),
+	]).then(([{Snackbar}, {}, {html, render}]) => {
+		const sb = new Snackbar()
+		sb.leading = true
+		document.body.append(sb)
+		sb.labelText =
+			"Welcome to zztetris! (fork of aznguy's schoolteto, visit the github for more info). But first, make sure to hop in the settings to suit your style!"
+		render(
+			html`<mwc-button
+				slot="action"
+				@click="${(e) => e.stopPropagation()}"
+				target="popup"
+				onclick="ctrlsPopup()"
+				>Settings</mwc-button
+			>`,
+			sb,
+		)
+		sb.timeoutMs = -1
+		sb.show()
+	})
 
 // Array.prototype.getRand = function () {
 // 	return this[Math.floor(Math.random() * this.length)];
