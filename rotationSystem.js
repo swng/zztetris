@@ -444,56 +444,56 @@ kicksets = {
             [0, 1],
         ],
         // I Piece Kicks
-        "I0-1": [
+        "I0-1": [//bias should be right (pos x) (this is verified as long as center of rotation spawns in between and under the middle minos of the I piece)
             [0, 0],
             [1, 0],
             [0, -1],
             [1, -1],
             [1, 2],
         ],
-        "I1-0": [
+        "I1-0": [//bias should be up (pos y) (inverse) 
             [0, 0],
-            [-1, 0],
             [0, 1],
-            [-1, 1],
-            [-1, -2],
-        ],
-        "I1-2": [
-            [0, 0],
             [-1, 0],
-            [0, 1],
             [-1, 1],
-            [-1, -2],
+            [2, 1],
         ],
-        "I2-1": [
+        "I1-2": [//bias should be down (neg y)
             [0, 0],
-            [1, 0],
             [0, -1],
-            [1, -1],
-            [1, 2],
-        ],
-        "I2-3": [
-            [0, 0],
             [-1, 0],
-            [0, -1],
             [-1, -1],
-            [-1, 2],
+            [2, -1],
         ],
-        "I3-2": [
-            [0, 0],
-            [1, 0],
-            [0, 1],
-            [1, 1],
-            [1, 2],
-        ],
-        "I3-0": [
+        "I2-1": [//bias should be right (pos x) (inverse)
             [0, 0],
             [1, 0],
             [0, 1],
             [1, 1],
             [1, -2],
         ],
-        "I0-3": [
+        "I2-3": [//bias should be left (neg x)
+            [0, 0],
+            [-1, 0],
+            [0, 1],
+            [-1, 1],
+            [-1, 2],
+        ],
+        "I3-2": [//bias should be down (neg y) (inverse)
+            [0, 0],
+            [0, -1],
+            [1, 0],
+            [1, -1],
+            [-2, -1],
+        ],
+        "I3-0": [//bias should be up (pos y)
+            [0, 0],
+            [0, 1],
+            [1, 0],
+            [1, 1],
+            [2, 1],
+        ],
+        "I0-3": [//bias should be left (neg x) (inverse)
             [0, 0],
             [-1, 0],
             [0, -1],
