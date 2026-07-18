@@ -289,12 +289,12 @@ async function sfinder() {
 	fumen = encode(board);
 	console.log(fumen);
 	let export_queue = holdP + piece + queue.join("").replaceAll("|","");
-	window.open(`https://sfinder.sixwi.de/?fumen=${fumen}&command=path&game=jstris&clearLines=4&queue=${export_queue}`, '_blank');
+	window.open(`https://sfinder.sixwi.de/?fumen=${encodeURIComponent(fumen)}&command=path&game=jstris&clearLines=4&queue=${export_queue}`, '_blank');
 }
 
 async function sfinder_combo() {
 	fumen = encode(board);
 	console.log(fumen);
 	let export_queue = holdP + piece + queue.join("").replaceAll("|","");
-	window.open(`https://sfinder.sixwi.de/?fumen=${fumen}&command=ren&game=jstris&clearLines=4&queue=${export_queue}`, '_blank');
+	window.open(`https://sfinder.sixwi.de/?fumen=${encodeURIComponent(fumen)}&command=ren&game=jstris&clearLines=4&queue=${export_queue}`, '_blank');
 }
