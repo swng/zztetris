@@ -116,6 +116,7 @@ const color = { // piece colors
 	I: '#0BF',
 	J: '#05F',
 	T: '#C3F',
+	M: '#999',
 	A: '#2A2A2A',
 	X: '#999999',
 };
@@ -128,6 +129,7 @@ const reversed = { // mirrored pieces
 	I: 'I',
 	J: 'L',
 	T: 'T',
+	M: 'M',
 	A: 'A',
 	X: 'X',
 	'|': '|',
@@ -142,6 +144,7 @@ var imgs = { // piece images
 	I: './assets/pieceSprite/i.png',
 	J: './assets/pieceSprite/j.png',
 	T: './assets/pieceSprite/t.png',
+	M: './assets/pieceSprite/m.png',
 };
 
 // default settings
@@ -385,7 +388,7 @@ document.getElementById('n').addEventListener('click', (event) => {
 	temp = [];
 	for (i = 0; i < QueueInput.length; i++) {
 		//sanitization
-		if ('SZLJIOT'.includes(QueueInput[i])) temp.push(QueueInput[i]);
+		if ('SZLJIOTM'.includes(QueueInput[i])) temp.push(QueueInput[i]);
 	}
 	if (temp.length > 0) {
 		temp.push('|'); // could probably insert one every 7 pieces but am too lazy
@@ -405,7 +408,7 @@ document.getElementById('h').addEventListener('click', (event) => {
 	}
 	HoldInput = HoldInput[0]; // make sure it's just 1 character
 	//sanitization
-	if ('SZLJIOT'.includes(HoldInput)) {
+	if ('SZLJIOTM'.includes(HoldInput)) {
 		holdP = HoldInput;
 		updateQueue();
 	}
@@ -453,16 +456,18 @@ function updateGhost() {
 
 function canMove(p, x, y) {
 	var free = 0;
+	var total = 0; // 4 for all tetraminoes, 1 for monomino. Counting.
 	for (let row = 0; row < 4; row++) {
 		for (let cell = 0; cell < 4; cell++) {
 			if (p[row][cell] == 1) {
+				total++;
 				if (board[y + row] && board[y + row][x + cell] && board[y + row][x + cell].t != 1) {
 					free++;
 				}
 			}
 		}
 	}
-	return free >= 4;
+	return free >= total;
 }
 
 function checkTopOut() {
@@ -597,6 +602,12 @@ function callback(gravity=700, special_restart=false, cheese=false) {
 
 	keysDown = 0;
 	lastKeys = 0;
+
+	// Exposes the same action functions the keyboard/touch handlers below call,
+	// so external code (bot.js) can drive the game through the normal
+	// move/rotate/hold/hardDrop logic (collision + kicks included) instead of
+	// poking at board/xPOS/yPOS directly.
+	window.zzBot = { move, rotate, hold, hardDrop, softDrop };
 
 	document.getElementById('tc-un').addEventListener('touchstart', function (e) {
 		input = 'UNDO';
